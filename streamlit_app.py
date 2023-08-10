@@ -42,23 +42,32 @@ try:
     streamlit.dataframe(back_from_function)
 except URLError as e:
   streamlit.error()
+
 #streamlit.write('The user entered ', fruit_choice)
-
-
 # streamlit.text(fruityvice_response.json())
 # write your own comment -what does the next line do? 
-
-
 # write your own comment - what does this do?
 
+steramlit.header("The fruit load list contains")
+#Snowflake-related functions
+def get_fruit_load_list():
+  with my_cnx_cursor as my_cur:
+    my_cur.execute("select * from fruit_load_list")
+    return my_cur.fetchall()
 
-streamlit.stop()
-my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-my_cur = my_cnx.cursor()
-my_cur.execute("select * from fruit_load_list")
-my_data_rows = my_cur.fetchall()
-streamlit.header("The fruit load list contains:")
-streamlit.dataframe(my_data_rows)
+#Add a button to loadthe fruit
+if streamlit.button("Get Fruit Load List"):
+  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+  my_data_rows = get_fruit_load_list()
+  streamlit.dataframe(my_data_rows)
+
+#streamlit.stop()
+#my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+#my_cur = my_cnx.cursor()
+#my_cur.execute("select * from fruit_load_list")
+#my_data_rows = my_cur.fetchall()
+#streamlit.header("The fruit load list contains:")
+#streamlit.dataframe(my_data_rows)
 
 add_my_fruit = streamlit.text_input('What fruit do you like to add?','')
 streamlit.write('Thanks for adding: ', add_my_fruit)
